@@ -63,15 +63,15 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
  */
 int file_exists(const char *filepath)
 {
-    FILE *file = fopen(filepath, "r");
-    
-    if (file)
+	FILE *file = fopen(filepath, "r");
+	
+	if (file)
 	{
-        fclose(file);
+		fclose(file);
 		return (1);
 	}
-    else
-        return (0);
+	else
+		return (0);
 }
 
 /**
@@ -81,12 +81,12 @@ int file_exists(const char *filepath)
 */
 int arr_length(char **arr)
 {
-    int i = 0;
+	int i = 0;
 
-    while (arr[i] != NULL)
+	while (arr[i] != NULL)
 		i++;
 
-    return (i);
+	return (i);
 }
 
 /**

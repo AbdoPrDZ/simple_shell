@@ -49,36 +49,36 @@ void _puts(char *str)
  */
 char *str_join(int n, ...)
 {
-    int i, j, k, rsLen = 0;
-    va_list args;
-    char *s, *rs;
+	int i, j, k, rsLen = 0;
+	va_list args;
+	char *s, *rs;
 
-    va_start(args, n);
+	va_start(args, n);
 
-    for (i = 0; i < n; i++)
-        rsLen += _strlen(va_arg(args, char *));
+	for (i = 0; i < n; i++)
+		rsLen += _strlen(va_arg(args, char *));
 
-    rs = malloc(sizeof(char) * (rsLen + 1));
+	rs = malloc(sizeof(char) * (rsLen + 1));
 
-    if (rs == NULL)
-        return (NULL);
+	if (rs == NULL)
+		return (NULL);
 
-    va_end(args);
+	va_end(args);
 
-    va_start(args, n);
+	va_start(args, n);
 
-    for (i = 0, k = 0; i < n; i++)
-    {
-        s = va_arg(args, char *);
-        for (j = 0; j < _strlen(s); j++, k++)
-            rs[k] = s[j];
-    }
+	for (i = 0, k = 0; i < n; i++)
+	{
+		s = va_arg(args, char *);
+		for (j = 0; j < _strlen(s); j++, k++)
+			rs[k] = s[j];
+	}
 
-    rs[k] = '\0';
+	rs[k] = '\0';
 
-    va_end(args);
+	va_end(args);
 
-    return (rs);
+	return (rs);
 }
 
 /**
