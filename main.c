@@ -5,7 +5,7 @@
 
 /**
  * handle_signal - checks if Ctrl C is pressed
- * @num: signal number
+ * @n: signal number
  */
 void handle_signal(int n)
 {
@@ -13,6 +13,11 @@ void handle_signal(int n)
 		_puts(SHELL_COMMAND_START_MESSAGE);
 }
 
+/**
+ * handle_eof - end of file handler.
+ * @len: the length.
+ * @buff: the buffer.
+*/
 void handle_eof(int len, char *buff)
 {
 	(void)buff;
@@ -27,12 +32,19 @@ void handle_eof(int len, char *buff)
 	}
 }
 
+/**
+ * _isatty - check if is atty
+ */
 void _isatty(void)
 {
 	if (isatty(STDIN_FILENO))
 		_puts(SHELL_COMMAND_START_MESSAGE);
 }
 
+/**
+ * main - Main function.
+ * Return: Always 0.
+ */
 int main(void)
 {
 	char *input = NULL, **argv;

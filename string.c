@@ -44,8 +44,8 @@ void _puts(char *str)
 
 /**
  * str_join - print strings arguments.
- * @separator: the separator string.
  * @n: the length of arguments.
+ * Return: joined string.
  */
 char *str_join(int n, ...)
 {

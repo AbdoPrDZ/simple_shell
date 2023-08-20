@@ -34,6 +34,9 @@ linked_list *ll_add_end(linked_list **head, char *str)
 
 /**
  * ll_from_string - create linked list from string by split the string
+ * @str: the string.
+ * @imm: the splitter string.
+ * Return: head of linked list
 */
 linked_list *ll_from_string(char *str, char *imm)
 {
