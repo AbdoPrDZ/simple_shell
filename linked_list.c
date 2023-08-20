@@ -1,3 +1,4 @@
+#include "main.h"
 #include "linked_list.h"
 
 /**
@@ -68,5 +69,22 @@ void ll_free(linked_list *head)
 		free(head->str);
 		free(head);
 		head = tmp;
+	}
+}
+
+/**
+ * ll_print - print all linked list items
+ * @head: the pointer of linked list head
+ */
+void ll_print(linked_list *head)
+{
+	if (!head)
+		return;
+
+	while (head->next)
+	{
+		_puts(head->str);
+		_putchar('\n');
+		head = head->next;
 	}
 }

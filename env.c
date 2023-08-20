@@ -2,6 +2,27 @@
 #include "linked_list.h"
 
 /**
+ * env_all - get all env variables as linked list
+ * Return: linked list of env variables
+*/
+
+linked_list *env_all(void)
+{
+	linked_list *head;
+	int i;
+
+	head = malloc(sizeof(linked_list));
+	head->str = environ[0];
+
+	for (i = 1; environ[i]; i++)
+	{
+		head = ll_add_end(&head, environ[i]);
+	}
+
+	return (head);
+}
+
+/**
  * _getenv - gets the value of the global variable
  * @name: name of the global variable
  * Return: string of value

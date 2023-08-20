@@ -3,6 +3,7 @@
 
 #define SHELL_COMMAND_START_MESSAGE "(abdali-shell)$ "
 
+#include "linked_list.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -10,7 +11,6 @@ extern char **environ;
 
 /* Utils*/
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
-void exec(char **argv);
 int file_exists(const char *filepath);
 int arr_length(char **arr);
 
@@ -24,6 +24,7 @@ char **str_split(char *str, char *spl);
 int str2int(char *s);
 
 /* Env */
+linked_list *env_all(void);
 char *_getenv(const char *name);
 void _setenv(char **argv);
 void _unsetenv(char **argv);
