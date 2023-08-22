@@ -1,12 +1,13 @@
 #include "main.h"
 #include "linked_list.h"
+#include "string.h"
 
 /**
  * ll_add_end - add node in the end of linked list.
  * @head: the pointer of head.
  * @str: the string.
  * Return: the new pointer oh head.
-*/
+ */
 linked_list *ll_add_end(linked_list **head, char *str)
 {
 	linked_list *tmp, *node;
@@ -38,7 +39,7 @@ linked_list *ll_add_end(linked_list **head, char *str)
  * @str: the string.
  * @imm: the splitter string.
  * Return: head of linked list
-*/
+ */
 linked_list *ll_from_string(char *str, char *imm)
 {
 	linked_list *head = NULL;
@@ -58,7 +59,7 @@ linked_list *ll_from_string(char *str, char *imm)
 /**
  * ll_free - free the linked list
  * @head: the pointer of head
-*/
+ */
 void ll_free(linked_list *head)
 {
 	linked_list *tmp;

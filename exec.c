@@ -1,30 +1,55 @@
 #include "exec.h"
 #include "main.h"
-#include <string.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
 
-/*
-char **detect_env_variables(char **argv)
+/**
+ * detect_env_variables - detect env variables in argv and replace them.
+ * @argv: array of argv.
+ */
+void detect_env_variables(char **argv)
 {
-	char **names = env_get_names();
-	int i, j, ni, alen = arr_length(argv), nlen = arr_length(names);
+	int i;
+	char *arg, *start, *end, *var_name, *var_value, *temp;
 
-	for (i = 0; i < alen; i++)
-		for (j = 0; j < nlen; j++)
+	for (i = 0; argv[i] != NULL; i++)
+	{
+		arg = argv[i];
+		start = strchr(arg, '$');
+
+		while (start)
 		{
-			ni = str_contains(argv[i], str_join(2, "$", names[j]));
-			if (ni != -1)
-				argv[i] = str_replace(argv[i], env_get(names[j]), str_join(2, "$", names[j]));
+			end = start + 1;
+			while (*end && (*end == '_' || isalnum(*end)))
+			{
+				end++;
+			}
+
+			if (end > start + 1)
+			{
+				var_name = malloc(end - start);
+				strncpy(var_name, start + 1, end - start - 1);
+				var_name[end - start - 1] = '\0';
+
+				var_value = env_get(var_name);
+				if (var_value != NULL)
+				{
+					temp = str_replace(arg, var_value, str_join(2, "$", var_name));
+					free(arg);
+					arg = temp;
+				}
+
+				free(var_name);
+			}
+
+			start = strchr(end, '$');
 		}
-	
-	return (argv);
-}*/
+
+		argv[i] = arg;
+	}
+}
 
 /**
  * exec - execute the command.
- * @argv: the array of arguments
+ * @argv: the array of arguments.
  */
 void exec(char **argv)
 {
@@ -35,7 +60,7 @@ void exec(char **argv)
 	if (!argv || !argv[0])
 		return;
 
-	/*argv = detect_env_variables(argv);*/
+	detect_env_variables(argv);
 
 	filename = argv[0];
 	func = exec_get(filename);
@@ -66,68 +91,9 @@ void exec(char **argv)
 }
 
 /**
- * exec_exit - command to exit
-*/
-void exec_exit(char **argv)
-{
-	int status = 0;
-
-	if (argv[0])
-		status = str2int(argv[0]);
-
-	exit(status);
-}
-
-/**
- * exec_env - command to print all env variables
-*/
-void exec_env(char **argv)
-{
-	char *env;
-
-	if (argv[0])
-	{
-		env = env_get(argv[0]);
-		if (env)
-		{
-			_puts(env);
-			_putchar('\n');
-		}
-	}
-	else
-		ll_print(env_all());
-}
-
-/**
- * exec_env - command to print all env variables
-*/
-void exec_env_set(char **argv)
-{
-	if (!argv[0])
-	{
-		perror(env_get("_"));
-		return;
-	}
-
-	env_set(argv[0], argv[1]);
-}
-
-/**
- * exec_env - command to print all env variables
-*/
-void exec_env_unset(char **argv)
-{
-	if (!argv[0])
-	{
-		perror(env_get("_"));
-		return;
-	}
-
-	env_unset(argv[0]);
-}
-
-/**
- * exec_get - get executer function
+ * exec_get - get executer function.
+ * @name: name of exec.
+ * Return: the pointer of exec function
  */
 void (*exec_get(char *name))(char **)
 {

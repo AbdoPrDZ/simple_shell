@@ -4,24 +4,18 @@
 /**
  * _realloc - reallocates memory block.
  * @ptr: previous pointer.
- * @old_size: old size of previous pointer.
  * @new_size: new size for our pointer.
  * Return: New resized Pointer.
  */
 void *_realloc(void *ptr, unsigned int new_size)
 {
-	unsigned int old_size = sizeof(ptr);
-	char *new;
-	char *old;
-
-	unsigned int i;
+	unsigned int old_size = sizeof(ptr), i;
+	char *new, *old;
 
 	if (ptr == NULL)
 		return (malloc(new_size));
-
 	if (new_size == old_size)
 		return (ptr);
-
 	if (new_size == 0 && ptr != NULL)
 	{
 		free(ptr);
@@ -71,54 +65,4 @@ int file_exists(const char *filepath)
 	}
 
 	return (0);
-}
-
-/**
- * arr_length - get array length
- * @arr: the array.
- * Return: the length of array
-*/
-int arr_length(char **arr)
-{
-	int i = 0;
-
-	while (arr[i] != NULL)
-		i++;
-
-	return (i);
-}
-
-/**
- * arr_remove - remove element from array
- * @arr: the array.
- * @index: index of element.
- */
-char **arr_remove(char **arr, int index)
-{
-    int i, len = arr_length(arr);
-
-    if (!arr || index < 0 || index >= len)
-        return (arr);
-
-    free(arr[index]);
-
-    for (i = index; i < len - 1; i++)
-	{
-        arr[i] = arr[i + 1];
-    }
-
-    arr[len - 1] = NULL;
-
-    return arr;
-}
-
-int arr_contains(char **arr, char *item)
-{
-	int i, alen = arr_length(arr);
-
-	for (i = 0; i < alen; i++)
-		if (strcmp(arr[i], item))
-			return (i);
-	
-	return (-1);
 }
