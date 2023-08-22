@@ -1,4 +1,5 @@
 #include "main.h"
+#include <string.h>
 
 /**
  * _realloc - reallocates memory block.
@@ -7,8 +8,9 @@
  * @new_size: new size for our pointer.
  * Return: New resized Pointer.
  */
-void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
+void *_realloc(void *ptr, unsigned int new_size)
 {
+	unsigned int old_size = sizeof(ptr);
 	char *new;
 	char *old;
 
@@ -67,8 +69,8 @@ int file_exists(const char *filepath)
 		fclose(file);
 		return (1);
 	}
-	else
-		return (0);
+
+	return (0);
 }
 
 /**
@@ -84,4 +86,39 @@ int arr_length(char **arr)
 		i++;
 
 	return (i);
+}
+
+/**
+ * arr_remove - remove element from array
+ * @arr: the array.
+ * @index: index of element.
+ */
+char **arr_remove(char **arr, int index)
+{
+    int i, len = arr_length(arr);
+
+    if (!arr || index < 0 || index >= len)
+        return (arr);
+
+    free(arr[index]);
+
+    for (i = index; i < len - 1; i++)
+	{
+        arr[i] = arr[i + 1];
+    }
+
+    arr[len - 1] = NULL;
+
+    return arr;
+}
+
+int arr_contains(char **arr, char *item)
+{
+	int i, alen = arr_length(arr);
+
+	for (i = 0; i < alen; i++)
+		if (strcmp(arr[i], item))
+			return (i);
+	
+	return (-1);
 }

@@ -23,17 +23,29 @@ linked_list *env_all(void)
 }
 
 /**
- * _getenv - gets the value of the global variable
- * @name: name of the global variable
- * Return: string of value
+ * env_length - get env variables length
+ * Return: length of variables
  */
-char *_getenv(const char *name)
+int env_length(void)
+{
+	int i = 0;
+
+	while (environ[i])
+		i++;
+
+	return (i);
+}
+
+/**
+ * env_get_index - get index of env by name
+ * @name: name of env variable
+ */
+int env_get_index(const char *name)
 {
 	int i, j = 0;
-	char *value;
 
 	if (!name)
-		return (NULL);
+		return (-1);
 
 	for (i = 0; environ[i]; i++, j = 0)
 		if (name[j] == environ[i][j])
@@ -43,107 +55,80 @@ char *_getenv(const char *name)
 					break;
 
 			if (name[j] == '\0')
-			{
-				value = (environ[i] + j + 1);
-				return (value);
-			}
+				return (i);
 		}
 
-	return (0);
+	return (-1);
 }
 
 /**
- * _setenv - Initialize a new environment variable, or modify an existing one
- * @argv: array of entered words
+ * env_get - gets the value of env variable
+ * @name: name of env variable
+ * Return: string of value
  */
-void _setenv(char **argv)
+char *env_get(char *name)
 {
-	int i, j, k;
+	int i;
 
-	if (!argv[1] || !argv[2])
-	{
-		perror(_getenv("_"));
-		return;
-	}
+	if (!name)
+		return (NULL);
 
-	for (i = 0, j = 0; environ[i]; i++)
-		if (argv[1][j] == environ[i][j])
-		{
-			for (; argv[1][j]; j++)
-				if (argv[1][j] != environ[i][j])
-					break;
+	i = env_get_index(name);
+	if (i != -1)
+		return (environ[i] + _strlen(name) + 1);
 
-			if (argv[1][j] == '\0')
-			{
-				
-				for (k = 0; argv[2][k]; k++)
-					environ[i][j + 1 + k] = argv[2][k];
-
-				environ[i][j + 1 + k] = '\0';
-
-				return;
-			}
-		}
-
-	if (!environ[i])
-	{
-		environ[i] = str_join(3, argv[1], "=", argv[2]);
-		environ[i + 1] = '\0';
-	}
+	return (NULL);
 }
 
 /**
- * _unsetenv - Remove an environment variable
- * @argv: array of entered words
+ * env_set - edit or create env variable
+ * @name: name of variable
+ * @vale: variable value.
  */
-void _unsetenv(char **argv)
+void env_set(char *name, char *value)
 {
-	int i, j;
+	int i, elen = env_length();
 
-	if (!argv[1])
+	i = env_get_index(name);
+	if (i != -1)
+		environ[i] = str_place(environ[i], value, _strlen(name) + 1, 0);
+	else
 	{
-		perror(_getenv("_"));
-		return;
-	}
-	for (i = 0; environ[i]; i++)
-	{
-		j = 0;
-		if (argv[1][j] == environ[i][j])
-		{
-			while (argv[1][j])
-			{
-				if (argv[1][j] != environ[i][j])
-					break;
-
-				j++;
-			}
-			if (argv[1][j] == '\0')
-			{
-				free(environ[i]);
-				environ[i] = environ[i + 1];
-				while (environ[i])
-				{
-					environ[i] = environ[i + 1];
-					i++;
-				}
-				return;
-			}
-		}
+		environ[elen] = str_join(3, name, "=", value);
+		environ[elen + 1] = '\0';
 	}
 }
 
+void env_unset(char *name)
+{
+	arr_remove(environ, env_get_index(name));
+}
+
+char **env_get_names(void)
+{
+	int i, elen = env_length();
+	char **names = malloc(sizeof(char) * elen + 1);
+
+	for (i = 0; i < elen; i++)
+		names[i] = str_split(environ[i], "=")[0];
+
+	names[i] = '\0';
+
+	return (names);
+}
+
 /**
- * search_in_path_env - search if filename exists in path_env dirs
+ * env_search_in_path - search if filename exists in path_env dirs
  * @filename: the filename want to search.
  * Return: full path if exists, Null of not
 */
-char *search_in_path_env(char *filename)
+char *env_search_in_path(char *filename)
 {
 	char *full_path;
 
 	linked_list *tmp;
 
-	tmp = ll_from_string(_getenv("PATH"), ":");
+	tmp = ll_from_string(env_get("PATH"), ":");
 
 	while (tmp)
 	{

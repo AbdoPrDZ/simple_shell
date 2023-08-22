@@ -12,11 +12,10 @@
 typedef struct exec_t
 {
 	char *name;
-	void (*exec)(void);
+	void (*func)(char **);
 } exec_t;
 
 void exec(char **argv);
-void exec_exit(void);
-void (*exec_get(char *name))(void);
+void (*exec_get(char *name))(char **);
 
 #endif /* EXEC_H */

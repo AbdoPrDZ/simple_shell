@@ -42,35 +42,58 @@ void _isatty(void)
 		_puts(SHELL_COMMAND_START_MESSAGE);
 }
 
+int main(void)
+{
+	char *original = "hello world, hello universe!";
+    char *replacement = "hi";
+    char *target = "hello";
+
+    char *result = str_replace(original, replacement, target);
+    if (result) {
+        printf("Original: %s\n", original);
+        printf("Replacement: %s\n", replacement);
+        printf("Target: %s\n", target);
+        printf("Result: %s\n", result);
+        free(result);
+    }
+
+	return (0);
+}
+
 /**
  * main - Main function.
  * Return: Always 0.
  */
-int main(void)
+int mainold(void)
 {
-	char *input = NULL, **argv;
+	char *command, **commands, **argv;
 	size_t isize = 0;
 	ssize_t glen;
-	int run = 1, ilen;
+	int i, ilen;
 
 	signal(SIGINT, handle_signal);
-	while (run)
+	while (1)
 	{
 		_isatty();
-		glen = getline(&input, &isize, stdin);
+		glen = getline(&command, &isize, stdin);
 
-		handle_eof(glen, input);
+		handle_eof(glen, command);
 
-		argv = str_split(input, " \n");
+		commands = str_arr_clean(str_split(command, ";"));
 
-		ilen = strlen(input);
-		if (ilen > 0 && input[ilen - 1] == '\n')
-			input[ilen - 1] = '\0';
+		for (i = 0; commands[i]; i++)
+		{
+			ilen = _strlen(commands[i]);
+			if (ilen > 0 && commands[i][ilen - 1] == '\n')
+				commands[i][ilen - 1] = '\0';
 
-		exec(argv);
+			argv = str_arr_clean(str_split(commands[i], " "));
+
+			exec(argv);
+		}
 	}
 
-	free(input);
+	free(command);
 
 	return (0);
 }
