@@ -18,19 +18,20 @@
 typedef struct exec_t
 {
 	char *name;
-	void (*func)(char **);
+	int (*func)(char **);
 } exec_t;
 
 void exec(char **argv);
-void (*exec_get(char *name))(char **);
+int (*exec_get(char *name))(char **);
 
 /* own */
-void exec_exit(char **argv);
-void exec_env(char **argv);
-void exec_env_set(char **argv);
-void exec_env_unset(char **argv);
-void exec_chdir(char **argv);
-void exec_alias(char **argv);
-void exec_unalias(char **argv);
+int exec_exit(char **argv);
+int exec_env(char **argv);
+int exec_env_set(char **argv);
+int exec_env_unset(char **argv);
+int exec_chdir(char **argv);
+int exec_alias(char **argv);
+int exec_get_pid(char **argv);
+int exec_last_exit_status(char **argv);
 
 #endif /* EXEC_H */

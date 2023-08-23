@@ -1,4 +1,4 @@
-#include "main.h"
+#include "shell.h"
 #include "string.h"
 
 /**
@@ -60,25 +60,6 @@ char *str_replace(const char *str, const char *replace, const char *target)
 	return (new);
 }
 
-char *str_replace_all(const char *str, const char *replace, const char *target)
-{
-	int ti;
-	char *new, *c_replace, *c_target;
-
-	ti = str_contains(str, target);
-	new = str_copy(str);
-	c_replace = str_copy(replace);
-	c_target = str_copy(target);
-
-	while (ti != -1)
-		new = str_replace(new, c_replace, c_target);
-	
-	free(c_replace);
-	free(c_target);
-
-	return (new);
-}
-
 /**
  * str_split - split a string
  * @str: the string want to split.
@@ -119,4 +100,61 @@ char **str_split(char *str, char *imm)
 	items[k] = NULL;
 
 	return (items);
+}
+
+/**
+ * str_rev - reverse string.
+ * @str: the string.
+ * Return: reversed string.
+ */
+char *str_rev(const char *str)
+{
+	int i, len = _strlen(str);
+	char *reversed = (char *)malloc(len + 1);
+
+	if (reversed == NULL)
+		return (NULL);
+
+	for (i = 0; i < len; i++)
+		reversed[i] = str[len - i - 1];
+
+	reversed[len] = '\0';
+
+	return (reversed);
+}
+
+/**
+ * int2str - convert int to string.
+ * @n: the number.
+ * Return: converted string.
+ */
+char *int2str(int n)
+{
+	char *str = NULL;
+	int sign = 1;
+	int i = 0;
+
+	if (n < 0)
+		sign = -1, n = -n;
+
+	str = (char *)malloc(11);
+	if (!str)
+		return (NULL);
+
+	str[i++] = n % 10 + '0';
+	n /= 10;
+	while (n > 0)
+	{
+		str[i++] = n % 10 + '0';
+		n /= 10;
+	}
+
+	if (sign == -1)
+		str[i++] = '-';
+
+	str[i] = '\0';
+
+	str = str_rev(str);
+
+	return (str);
 }

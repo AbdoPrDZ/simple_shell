@@ -1,4 +1,4 @@
-#include "main.h"
+#include "shell.h"
 #include "env.h"
 
 /**
@@ -11,12 +11,10 @@ linked_list *env_all(void)
 	int i;
 
 	head = malloc(sizeof(linked_list));
-	head->str = environ[0];
+	head->data = environ[0];
 
 	for (i = 1; environ[i]; i++)
-	{
-		head = ll_add_end(&head, environ[i]);
-	}
+		head = ll_add_end(head, environ[i]);
 
 	return (head);
 }

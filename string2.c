@@ -1,4 +1,4 @@
-#include "main.h"
+#include "shell.h"
 #include "arr.h"
 #include "string.h"
 
@@ -76,4 +76,21 @@ char **str_arr_clean(char **arr)
 	arr_free((void **)arr);
 
 	return (cleaned_arr);
+}
+
+/**
+ * str_char_count - counting char in string.
+ * @str: the string.
+ * @c: the char.
+ * Return: count of c in str.
+ */
+int str_char_count(char *str, char c)
+{
+	int i = 0, j = 0, len = _strlen(str);
+
+	for (i = 0; i < len; i++)
+		if (str[i] == c)
+			j++;
+
+	return (j);
 }

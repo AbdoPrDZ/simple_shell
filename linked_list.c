@@ -1,4 +1,4 @@
-#include "main.h"
+#include "shell.h"
 #include "arr.h"
 #include "linked_list.h"
 #include "string.h"
@@ -6,33 +6,33 @@
 /**
  * ll_add_end - add node in the end of linked list.
  * @head: the pointer of head.
- * @str: the string.
+ * @data: the item data.
  * Return: the new pointer oh head.
  */
-linked_list *ll_add_end(linked_list **head, char *str)
+linked_list *ll_add_end(linked_list *head, void *data)
 {
 	linked_list *tmp, *node;
 
 	node = malloc(sizeof(linked_list));
 
-	if (!node || !str)
+	if (!node || !data)
 		return (NULL);
 	
-	node->str = str;
+	node->data = data;
 	node->next = NULL;
 
-	if (!*head)
-		*head = node;
-	else
+	if (head)
 	{
-		tmp = *head;
+		tmp = head;
 		while (tmp->next)
 			tmp = tmp->next;
 		
 		tmp->next = node;
 	}
+	else
+		head = node;
 
-	return (*head);
+	return (head);
 }
 
 /**
@@ -52,7 +52,7 @@ linked_list *ll_from_string(char *str, char *imm)
 	slen = arr_length((void **)strs);
 
 	for (i = 0; i < slen; i++)
-		head = ll_add_end(&head, strs[i]);
+		head = ll_add_end(head, (void *)strs[i]);
 	
 	return (head);
 }
@@ -68,25 +68,9 @@ void ll_free(linked_list *head)
 	while (head)
 	{
 		tmp = head->next;
-		free(head->str);
+		free(head->data);
 		free(head);
 		head = tmp;
 	}
 }
 
-/**
- * ll_print - print all linked list items
- * @head: the pointer of linked list head
- */
-void ll_print(linked_list *head)
-{
-	if (!head)
-		return;
-
-	while (head->next)
-	{
-		_puts(head->str);
-		_putchar('\n');
-		head = head->next;
-	}
-}

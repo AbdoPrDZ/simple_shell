@@ -1,6 +1,6 @@
 #include "env.h"
 #include "arr.h"
-#include "main.h"
+#include "shell.h"
 
 /**
  * env_unset - remove env variable
@@ -26,7 +26,7 @@ char *env_search_in_path(char *filename)
 
 	while (tmp)
 	{
-		full_path = str_join(3, tmp->str, "/", filename);
+		full_path = str_join(3, tmp->data, "/", filename);
 	
 		if (file_exists(full_path))
 			return (full_path);

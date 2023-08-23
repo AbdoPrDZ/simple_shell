@@ -59,6 +59,12 @@ char *str_join(int n, ...)
 	return (rs);
 }
 
+/**
+ * str_arr_join - join array of string into string.
+ * @arr: the array.
+ * @sep: sep string.
+ * Return: the joined string.
+ */
 char *str_arr_join(char **arr, char *sep)
 {
 	int i, alen;

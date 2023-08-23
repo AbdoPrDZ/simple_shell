@@ -1,5 +1,7 @@
+#include "alias.h"
 #include "exec.h"
-#include "main.h"
+#include "shell.h"
+#include <errno.h>
 
 /**
  * detect_env_variables - detect env variables in argv and replace them.
@@ -48,14 +50,27 @@ void detect_env_variables(char **argv)
 }
 
 /**
+ * set_errno - set errno.
+ * @status: error status.
+ */
+void set_errno(int status)
+{
+	if (WIFEXITED(status))
+		errno = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		errno = 128 + WTERMSIG(status);
+}
+
+/**
  * exec - execute the command.
  * @argv: the array of arguments.
  */
 void exec(char **argv)
 {
+	int status, exe_status, (*func)(char **);
+	alias_t *ali;
 	pid_t pid;
 	char *filename;
-	void (*func)(char **);
 
 	detect_env_variables(argv);
 
@@ -63,9 +78,14 @@ void exec(char **argv)
 	func = exec_get(filename);
 	if (func)
 	{
-		func(argv + 1);
+		status = func(argv + 1);
+		set_errno(status);
 		return;
 	}
+
+	ali = alias_get(filename);
+	if (ali)
+		argv = get_argv(ali->command), filename = argv[0];
 
 	if (!file_exists(filename))
 	{
@@ -77,14 +97,16 @@ void exec(char **argv)
 	pid = fork();
 	if (pid == 0)
 	{
-		execve(filename, argv, environ);
-		perror(filename);
-		exit(EXIT_FAILURE);
+		exe_status = execve(filename, argv, environ);
+		if (exe_status == -1)
+			perror(filename), exit(EXIT_FAILURE);
+		
+		set_errno(exe_status);
 	}
 	else if (pid == -1)
 		perror(env_get("_"));
-
-	wait(NULL);
+	else
+		wait(&status), set_errno(status);
 }
 
 /**
@@ -92,7 +114,7 @@ void exec(char **argv)
  * @name: name of exec.
  * Return: the pointer of exec function
  */
-void (*exec_get(char *name))(char **)
+int (*exec_get(char *name))(char **)
 {
 	exec_t execs[] = {
 		{"exit", exec_exit},
@@ -101,7 +123,8 @@ void (*exec_get(char *name))(char **)
 		{"unsetenv", exec_env_unset},
 		{"cd", exec_chdir},
 		{"alias", exec_alias},
-		{"unalias", exec_unalias},
+		{"$$", exec_get_pid},
+		{"$?", exec_last_exit_status},
 		{NULL, NULL},
 	};
 

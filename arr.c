@@ -1,5 +1,5 @@
 #include "arr.h"
-#include "main.h"
+#include "shell.h"
 
 /**
  * arr_length - get array length
@@ -13,42 +13,53 @@ int arr_length(void **arr)
 	if (!arr)
 		return (0);
 
-	while (arr[i] != NULL)
+	while (arr[i])
 		i++;
 
 	return (i);
 }
-
+/**
+ * arr_copy - copy array.
+ * @arr: that array want to copy.
+ * Return: copied array.
+ */
 void **arr_copy(void **arr)
 {
-    int arr_length = arr_length(arr);
+	int i, len = arr_length(arr);
 	void **copy;
 
-    if (!arr)
-        return (NULL);
-
-    copy = malloc((arr_length + 1) * sizeof(void *));
-    if (!copy)
+	if (!arr)
 		return (NULL);
 
-    for (int i = 0; i <= arr_length; i++)
-        copy[i] = arr[i];
+	copy = malloc((len + 1) * sizeof(void *));
+	if (!copy)
+		return (NULL);
 
-    return copy;
+	for (i = 0; i <= len; i++)
+		copy[i] = arr[i];
+
+	return (copy);
 }
 
+/**
+ * arr_add - add item to array.
+ * @arr: the array.
+ * @item: the item want to add.
+ * Return: modifed array.
+ */
 void **arr_add(void **arr, void *item)
 {
-    int len = arr_length(arr);
-    void **carr;
+	int len;
+	void **carr;
 
-    carr = _realloc(arr, sizeof(void *) * (len + 1));
-    if (!carr)
-        return (NULL);
+	len = arr_length(arr);
+	carr = _realloc(arr, sizeof(void *) * (len + 1));
+	if (!carr)
+		return (NULL);
 
-    carr[len] = item;
+	carr[len] = item;
 
-    return (carr);
+	return (carr);
 }
 
 /**
