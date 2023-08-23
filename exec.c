@@ -57,9 +57,6 @@ void exec(char **argv)
 	char *filename;
 	void (*func)(char **);
 
-	if (!argv || !argv[0])
-		return;
-
 	detect_env_variables(argv);
 
 	filename = argv[0];
@@ -102,6 +99,9 @@ void (*exec_get(char *name))(char **)
 		{"env", exec_env},
 		{"setenv", exec_env_set},
 		{"unsetenv", exec_env_unset},
+		{"cd", exec_chdir},
+		{"alias", exec_alias},
+		{"unalias", exec_unalias},
 		{NULL, NULL},
 	};
 

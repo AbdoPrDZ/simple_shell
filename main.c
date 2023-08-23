@@ -1,4 +1,5 @@
 #include "main.h"
+#include "arr.h"
 #include "exec.h"
 #include <string.h>
 #include <unistd.h>
@@ -41,6 +42,23 @@ void _isatty(void)
 	if (isatty(STDIN_FILENO))
 		_puts(SHELL_COMMAND_START_MESSAGE);
 }
+/*
+char *continue_fill_quotes(char *command)
+{
+	int qi = -1, glen;
+	char *line, **lines;
+
+	while (qi == -1)
+	{
+		_puts("> ");
+		glen = getline(&line, &csize, stdin);
+		handle_eof(glen, line);
+		lines = (char **)arr_add((void **)lines, (void *)line);
+		qi = str_contains(line, "\"");
+	}
+	
+
+}*/
 
 /**
  * main - Main function.
@@ -69,15 +87,13 @@ int main(void)
 
 			commands = str_arr_clean(str_split(command, ";"));
 
-			for (i = 0; i < arr_length(commands); i++)
-			{
-				exec(str_arr_clean(str_split(commands[i], " ")));
-			}
+			for (i = 0; i < arr_length((void **)commands); i++)
+				exec(str_arr_clean(get_argv(commands[i])));
 		}
 	}
 
 	free(command);
-	arr_free(commands);
+	arr_free((void **)commands);
 
 	return (0);
 }

@@ -1,4 +1,5 @@
 #include "main.h"
+#include "arr.h"
 #include "string.h"
 
 /**
@@ -56,7 +57,7 @@ char **str_arr_clean(char **arr)
 	if (!arr)
 		return (NULL);
 
-	len = arr_length(arr);
+	len = arr_length((void **)arr);
 	cleaned_arr = malloc(sizeof(char *) * (len + 1));
 	if (!cleaned_arr)
 		return (NULL);
@@ -72,7 +73,7 @@ char **str_arr_clean(char **arr)
 
 	cleaned_arr[j] = NULL;
 
-	arr_free(arr);
+	arr_free((void **)arr);
 
 	return (cleaned_arr);
 }

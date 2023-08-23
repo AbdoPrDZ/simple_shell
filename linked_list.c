@@ -1,4 +1,5 @@
 #include "main.h"
+#include "arr.h"
 #include "linked_list.h"
 #include "string.h"
 
@@ -48,7 +49,7 @@ linked_list *ll_from_string(char *str, char *imm)
 
 	strs = str_split(str_copy(str), imm);
 
-	slen = arr_length(strs);
+	slen = arr_length((void **)strs);
 
 	for (i = 0; i < slen; i++)
 		head = ll_add_end(&head, strs[i]);

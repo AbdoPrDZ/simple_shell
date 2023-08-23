@@ -59,3 +59,64 @@ char *str_replace(const char *str, const char *replace, const char *target)
 
 	return (new);
 }
+
+char *str_replace_all(const char *str, const char *replace, const char *target)
+{
+	int ti;
+	char *new, *c_replace, *c_target;
+
+	ti = str_contains(str, target);
+	new = str_copy(str);
+	c_replace = str_copy(replace);
+	c_target = str_copy(target);
+
+	while (ti != -1)
+		new = str_replace(new, c_replace, c_target);
+	
+	free(c_replace);
+	free(c_target);
+
+	return (new);
+}
+
+/**
+ * str_split - split a string
+ * @str: the string want to split.
+ * @imm: the splitter string
+ * Return: array of strings
+ */
+char **str_split(char *str, char *imm)
+{
+	int i = 0, s = 0, k = 0, item_length, slen = strlen(str), ilen = strlen(imm);
+	char **items = malloc(sizeof(char *) * (slen / ilen));
+
+	if (items == NULL)
+		return (NULL);
+
+	while (i <= slen)
+	{
+		if (str[i] == imm[0] || i == slen)
+		{
+			if (i == slen || strncmp(str + i, imm, ilen) == 0)
+			{
+				item_length = i - s;
+
+				items[k] = malloc(item_length + 1);
+
+				if (items[k] == NULL)
+					return (NULL);
+
+				strncpy(items[k], str + s, item_length);
+				items[k][item_length] = '\0';
+				s = i + ilen;
+				k++;
+			}
+		}
+
+		i++;
+	}
+
+	items[k] = NULL;
+
+	return (items);
+}

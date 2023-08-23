@@ -1,4 +1,5 @@
 #include "string.h"
+#include "arr.h"
 
 /**
  * _strlen - it gives the length of a string
@@ -9,7 +10,10 @@ int _strlen(const char *s)
 {
 	int i = 0;
 
-	while (*(s + i) != '\0')
+	if (!s)
+		return (0);
+
+	while (s[i] != '\0')
 		i++;
 
 	return (i);
@@ -43,8 +47,9 @@ char *str_join(int n, ...)
 	for (i = 0, k = 0; i < n; i++)
 	{
 		s = va_arg(args, char *);
-		for (j = 0; j < _strlen(s); j++, k++)
-			rs[k] = s[j];
+		if (s)
+			for (j = 0; j < _strlen(s); j++, k++)
+				rs[k] = s[j];
 	}
 
 	rs[k] = '\0';
@@ -52,6 +57,28 @@ char *str_join(int n, ...)
 	va_end(args);
 
 	return (rs);
+}
+
+char *str_arr_join(char **arr, char *sep)
+{
+	int i, alen;
+	char *str;
+
+	alen = arr_length((void **)arr);
+
+	if (!arr || alen == 0)
+		return (NULL);
+
+	str = arr[0];
+
+	for (i = 1; i < alen; i++)
+	{
+		str = str_join(2, str, arr[i]);
+		if (i < alen - 1)
+			str = str_join(2, str, sep);
+	}
+
+	return (str);
 }
 
 /**
@@ -79,48 +106,6 @@ char *str_copy(const char *str)
 	new[len] = '\0';
 
 	return (new);
-}
-
-/**
- * str_split - split a string
- * @str: the string want to split.
- * @imm: the splitter string
- * Return: array of strings
- */
-char **str_split(char *str, char *imm)
-{
-	int i = 0, s = 0, k = 0, item_length, slen = strlen(str), ilen = strlen(imm);
-	char **items = malloc(sizeof(char *) * (slen / ilen));
-
-	if (items == NULL)
-		return (NULL);
-
-	while (i <= slen)
-	{
-		if (str[i] == imm[0] || i == slen)
-		{
-			if (i == slen || strncmp(str + i, imm, ilen) == 0)
-			{
-				item_length = i - s;
-
-				items[k] = malloc(item_length + 1);
-
-				if (items[k] == NULL)
-					return (NULL);
-
-				strncpy(items[k], str + s, item_length);
-				items[k][item_length] = '\0';
-				s = i + ilen;
-				k++;
-			}
-		}
-
-		i++;
-	}
-
-	items[k] = NULL;
-
-	return (items);
 }
 
 /**

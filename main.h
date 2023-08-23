@@ -12,11 +12,6 @@ extern char **environ;
 /* utils */
 void *_realloc(void *ptr, unsigned int new_size);
 int file_exists(const char *filepath);
-
-/* arr */
-int arr_length(char **arr);
-char **arr_remove(char **arr, int index);
-int arr_contains(char **arr, char *item);
-void arr_free(char **arr);
+char **get_argv(const char *command);
 
 #endif /* MAIN_H */

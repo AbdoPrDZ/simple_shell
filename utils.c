@@ -1,4 +1,5 @@
 #include "main.h"
+#include "string.h"
 #include <string.h>
 
 /**
@@ -65,4 +66,64 @@ int file_exists(const char *filepath)
 	}
 
 	return (0);
+}
+
+char **get_argv(const char *command)
+{
+    int num_args = 0, in_quotes = 0, argv_size = 0, arg_length;
+    char *arg_start = (char *)command, **argv = NULL, *temp_arg;
+
+    while (*command != '\0')
+    {
+        if (*command == '"' && (command == arg_start || *(command - 1) != '\\'))
+            in_quotes = !in_quotes;
+
+        if (*command == ' ' && !in_quotes)
+        {
+            arg_length = command - arg_start;
+            temp_arg = malloc(sizeof(char) * (arg_length + 1));
+            strncpy(temp_arg, arg_start, arg_length);
+            temp_arg[arg_length] = '\0';
+            if (arg_start != command)
+            {
+                if (num_args >= argv_size)
+                {
+                    argv_size += 10;
+                    argv = realloc(argv, sizeof(char *) * argv_size);
+                }
+                argv[num_args++] = str_copy(temp_arg);
+            }
+            arg_start = (char *)command + 1;
+        }
+
+        command++;
+    }
+
+    arg_length = command - arg_start;
+    temp_arg = malloc(sizeof(char) * (arg_length + 1));
+    strncpy(temp_arg, arg_start, arg_length);
+    temp_arg[arg_length] = '\0';
+    if (arg_start != command)
+    {
+        if (num_args >= argv_size)
+        {
+            argv_size += 10;
+            argv = realloc(argv, sizeof(char *) * argv_size);
+        }
+        argv[num_args++] = str_copy(temp_arg);
+    }
+
+    if (num_args > 0)
+    {
+        if (num_args >= argv_size)
+        {
+            argv_size += 1;
+            argv = realloc(argv, sizeof(char *) * argv_size);
+        }
+        argv[num_args] = NULL;
+    }
+    else
+        free(temp_arg);
+
+    return (argv);
 }

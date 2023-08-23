@@ -29,5 +29,8 @@ void exec_exit(char **argv);
 void exec_env(char **argv);
 void exec_env_set(char **argv);
 void exec_env_unset(char **argv);
+void exec_chdir(char **argv);
+void exec_alias(char **argv);
+void exec_unalias(char **argv);
 
 #endif /* EXEC_H */

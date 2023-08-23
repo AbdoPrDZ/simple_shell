@@ -1,4 +1,5 @@
 #include "env.h"
+#include "arr.h"
 #include "main.h"
 
 /**
@@ -7,7 +8,7 @@
  */
 void env_unset(char *name)
 {
-	arr_remove(environ, env_get_index(name));
+	arr_remove((void **)environ, env_get_index(name));
 }
 
 /**
