@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 int arr_length(void **arr);
-void **arr_remove(void **arr, int index);
+int arr_remove(void **arr, int index);
 void arr_free(void **arr);
 void **arr_copy(void **arr);
 void **arr_add(void **arr, void *item);

@@ -56,8 +56,7 @@ void exec_command(char *shell_filename, char *command)
 	commands = str_arr_clean(str_split(command, ";"));
 
 	for (i = 0; i < arr_length((void **)commands); i++)
-		/*exec(shell_filename, str_arr_clean(get_argv(commands[i])));*/
-		exec(shell_filename, (char **)arr_add(NULL, (void *)command));
+		exec(shell_filename, str_arr_clean(get_argv(commands[i])));
 		
 	arr_free((void **)commands);
 }
@@ -103,7 +102,7 @@ int main(int argc, char *arg[])
 			if (file_exists(arg[i]))
 				exec_file(arg[0], arg[i]);
 			else
-				_puts(str_join(4, arg[0], ": ", str_join(2, arg[i], N_ERROR)));
+				_puts(str_join(4, arg[0], ": ", str_join(2, arg[i], ERR1)));
 	}
 	else
 		while (1)

@@ -7,15 +7,25 @@
 
 /**
  * exec_exit - command to exit.
+ * @shell_filename: the shell filename.
  * @argv: array of argv.
  * Return: exec status.
  */
-int exec_exit(char **argv)
+int exec_exit(char *shell_filename, char **argv)
 {
-	int status = 0;
+	int status = 0, *_status;
 
 	if (argv[0])
-		status = str2int(argv[0]);
+	{
+		_status = str2int(argv[0]);
+		if (_status)
+		{
+			status = *_status;
+			free(_status);
+		}
+		else
+			_puts(str_join(4, shell_filename, ": exit: ", argv[0], ERR2));
+	}
 	
 	exit(status);
 	
@@ -24,21 +34,18 @@ int exec_exit(char **argv)
 
 /**
  * exec_env - command to print all env variables.
+ * @shell_filename: the shell filename.
  * @argv: array of argv.
  * Return: exec status.
  */
-int exec_env(char **argv)
+int exec_env(char *shell_filename, char **argv)
 {
-	char *env;
 	linked_list *head;
 
 	if (argv[0])
 	{
-		env = env_get(argv[0]);
-		if (env)
-			_puts(str_join(2, env, "\n"));
-		else
-			return (-1);
+		_puts(str_join(5, shell_filename, ": env: ‘", argv[0], "‘", ERR1));
+		return (-1);
 	}
 	else
 	{
@@ -56,13 +63,23 @@ int exec_env(char **argv)
 
 /**
  * exec_env_set - command to print all env variables.
+ * @shell_filename: the shell filename.
  * @argv: array of argv.
  * Return: exec status.
  */
-int exec_env_set(char **argv)
+int exec_env_set(char *shell_filename, char **argv)
 {
 	if (!argv[0])
+	{
+		_puts(str_join(2, shell_filename, ": setenv: Missing env name\n"));
 		return (-1);
+	}
+
+	if (arr_length((void **)argv) > 2)
+	{
+		_puts(str_join(2, shell_filename, ": setenv: too many arguments"));
+		return (-1);
+	}
 
 	env_set(argv[0], argv[1]);
 
@@ -71,34 +88,43 @@ int exec_env_set(char **argv)
 
 /**
  * exec_env_unset - command to print all env variables.
+ * @shell_filename: the shell filename.
  * @argv: array of argv.
  * Return: exec status.
  */
-int exec_env_unset(char **argv)
+int exec_env_unset(char *shell_filename, char **argv)
 {
+	int i, len = arr_length((void **)argv);
+
 	if (!argv[0])
+	{
+		_puts(str_join(2, shell_filename, ": unsetenv: Missing env name\n"));
 		return (-1);
+	}
 
-	env_unset(argv[0]);
+	for (i = 0; i < len; i++)
+		if (!env_unset(argv[i]))
+			_puts(str_join(4, shell_filename, ": unsetenv: ", argv[i], ERR1));
 
-	return (9);
+	return (0);
 }
 
 static char *old_pwd;
 
 /**
  * exec_chdir - move between directories.
+ * @shell_filename: the shell filename.
  * @argv: array of argv.
  * Return: exec status.
  */
-int exec_chdir(char **argv)
+int exec_chdir(char *shell_filename, char **argv)
 {
 	char *distance = env_get("HOME");
 	char *pwd, *cwd;
 
 	if (arr_length((void **)argv) > 1)
 	{
-		_puts("cd: too many arguments");
+		_puts(str_join(2, shell_filename, ": cd: too many arguments"));
 		return (-1);
 	}
 

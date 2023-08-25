@@ -5,10 +5,11 @@
 /**
  * env_unset - remove env variable
  * @name: env variable name.
+ * Return: 1 if success, or 0 if not.
  */
-void env_unset(char *name)
+int env_unset(char *name)
 {
-	arr_remove((void **)environ, env_get_index(name));
+	return (arr_remove((void **)environ, env_get_index(name)));
 }
 
 /**

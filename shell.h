@@ -1,9 +1,9 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-/* #define SHELL_COMMAND_START_MESSAGE "(abdali-shell)$ " */
-#define SHELL_COMMAND_START_MESSAGE "#cisfun$ "
-#define N_ERROR ": No such file or directory\n"
+#define SHELL_COMMAND_START_MESSAGE "(abdali-shell)$ "
+#define ERR1 ": No such file or directory\n"
+#define ERR2 ": numeric argument required\n"
 
 #include "linked_list.h"
 #include <stdio.h>

@@ -1,6 +1,6 @@
 #include "shell.h"
-#include "arr.h"
 #include "string.h"
+#include "arr.h"
 
 /**
  * _putchar - writes the character c to stdout
@@ -27,21 +27,35 @@ void _puts(const char *str)
 
 /**
  * str2int - converts a string into an integer
- * @s: pointer to a string 
+ * @str: pointer to a string 
  * Return: the integer
  */
-int str2int(char *s)
+int *str2int(const char *str)
 {
-	int i, integer = 0, sign = 1;
+	int i, integer = 0, sign = 1, *result;
+	char *cstr = str_clean_spaces_se(str);
 
-	for (i = 0; !((s[i] >= '0') && (s[i] <= '9')) && (s[i] != '\0'); i++)
-		if (s[i] == '-')
-			sign = sign * (-1);
+	if (!cstr)
+		return (NULL);
 
-	for (; (s[i] >= '0') && (s[i] <= '9'); i++)
-		integer = (integer * 10) + (sign * (s[i] - '0'));
+	for (i = 0; str[i] != '\0'; i++)
+	{
+		if ((str[i] >= '0' && str[i] <= '9') || (i == 0 && str[i] == '-'))
+		{
+			if (str[i] == '-')
+				sign = -1;
+			else
+				integer = (integer * 10) + (str[i] - '0');
+		}
+		else
+			return (NULL);
+	}
 
-	return (integer);
+	result = malloc(sizeof(int));
+	if (result != NULL)
+		*result = integer * sign;
+
+	return (result);
 }
 
 /**

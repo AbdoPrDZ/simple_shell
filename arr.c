@@ -66,14 +66,14 @@ void **arr_add(void **arr, void *item)
  * arr_remove - remove element from array
  * @arr: the array.
  * @index: index of element.
- * Return: new array.
+ * Return: 1 if success, 0 if not.
  */
-void **arr_remove(void **arr, int index)
+int arr_remove(void **arr, int index)
 {
 	int i, len = arr_length(arr);
 
 	if (!arr || index < 0 || index >= len)
-		return (arr);
+		return (0);
 
 	free(arr[index]);
 
@@ -82,7 +82,7 @@ void **arr_remove(void **arr, int index)
 
 	arr[len - 1] = NULL;
 
-	return (arr);
+	return (1);
 }
 
 /**

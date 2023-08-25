@@ -68,32 +68,32 @@ void set_errno(int status)
  */
 void exec(char *shell_filename, char **argv)
 {
-	int status, exe_status/*, (*func)(char **)*/;
-	/*alias_t *ali;*/
+	int status, exe_status, (*func)(char*, char **);
+	alias_t *ali;
 	pid_t pid;
 	char *filename;
 
-	/* detect_env_variables(argv); */
+	detect_env_variables(argv);
 
 	filename = argv[0];
-	/*func = exec_get(filename); */
-	/*if (func) */
-	/*{ */
-	/*	status = func(argv + 1); */
-	/*	set_errno(status); */
-	/*	return; */
-	/*} */
+	func = exec_get(filename);
+	if (func)
+	{
+		status = func(shell_filename, argv + 1);
+		set_errno(status);
+		return;
+	}
 
-	/*ali = alias_get(filename); */
-	/*if (ali) */
-	/*	argv = get_argv(ali->command), filename = argv[0]; */
+	ali = alias_get(filename);
+	if (ali)
+		argv = get_argv(ali->command), filename = argv[0];
 
-	/*if (!file_exists(filename)) */
-	/*{ */
-	/*	filename = env_search_in_path(filename); */
-	/*	if (!filename) */
-	/*		filename = argv[0]; */
-	/*} */
+	if (!file_exists(filename))
+	{
+		filename = env_search_in_path(filename);
+		if (!filename)
+			filename = argv[0];
+	}
 
 	pid = fork();
 	if (pid == 0)
@@ -115,7 +115,7 @@ void exec(char *shell_filename, char **argv)
  * @name: name of exec.
  * Return: the pointer of exec function
  */
-int (*exec_get(char *name))(char **)
+int (*exec_get(char *name))(char*, char **)
 {
 	exec_t execs[] = {
 		{"exit", exec_exit},

@@ -7,10 +7,11 @@
 
 /**
  * exec_alias - create edit delete alias commands.
+ * @shell_filename: the shell filename.
  * @argv: array of argv.
  * Return: exec status.
  */
-int exec_alias(char **argv)
+int exec_alias(char *shell_filename, char **argv)
 {
 	int i, alen, ei, vlen, status = 0;
 	char *name, *value;
@@ -27,7 +28,7 @@ int exec_alias(char **argv)
 		{
 			if (!alias_print(argv[0]))
 			{
-				_puts(str_join(3, "alias: ", argv[i], ": not found\n"));
+				_puts(str_join(4, shell_filename, ": alias: ", argv[i], ": Not found\n"));
 				status = -1;
 			}
 		}
@@ -52,25 +53,29 @@ int exec_alias(char **argv)
 }
 
 /**
- * exec_get_pid - get pid
+ * exec_get_pid - get pid.
+ * @shell_filename: the shell filename.
  * @argv: array of argv.
  * Return: exec status.
  */
-int exec_get_pid(char **argv)
+int exec_get_pid(char *shell_filename, char **argv)
 {
 	(void)argv;
+	(void)shell_filename;
 	_puts(str_join(2, int2str(getpid()), "\n"));
 	return (0);
 }
 
 /**
  * exec_last_exit_status - get last exit status.
+ * @shell_filename: the shell filename.
  * @argv: array of argv.
  * Return: exec status.
  */
-int exec_last_exit_status(char **argv)
+int exec_last_exit_status(char *shell_filename, char **argv)
 {
 	(void)argv;
+	(void)shell_filename;
 	_puts(str_join(2, int2str(errno), "\n"));
 	return (0);
 }
