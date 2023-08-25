@@ -2,7 +2,7 @@
 #define MAIN_H
 
 /* #define SHELL_COMMAND_START_MESSAGE "(abdali-shell)$ " */
-#define SHELL_COMMAND_START_MESSAGE "$"
+#define SHELL_COMMAND_START_MESSAGE "#cisfun$"
 #define N_ERROR ": No such file or directory\n"
 
 #include "linked_list.h"
