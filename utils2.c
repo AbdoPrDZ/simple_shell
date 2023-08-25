@@ -13,7 +13,7 @@
 void handle_signal(int n)
 {
 	if (n == SIGINT)
-		_puts(SHELL_COMMAND_START_MESSAGE);
+		_puts(str_join(2, "\n", SHELL_COMMAND_START_MESSAGE));
 }
 
 /**

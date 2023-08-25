@@ -21,7 +21,7 @@ typedef struct exec_t
 	int (*func)(char **);
 } exec_t;
 
-void exec(char **argv);
+void exec(char *shell_filename, char **argv);
 int (*exec_get(char *name))(char **);
 
 /* own */

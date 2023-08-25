@@ -42,9 +42,10 @@ char **remove_comment_all(char *text)
 
 /**
  * exec_command - execute the command.
+ * @shell_filename: the shell filename.
  * @command: the command.
  */
-void exec_command(char *command)
+void exec_command(char *shell_filename, char *command)
 {
 	char **commands = NULL;
 	int i, clen = _strlen(command);
@@ -55,16 +56,18 @@ void exec_command(char *command)
 	commands = str_arr_clean(str_split(command, ";"));
 
 	for (i = 0; i < arr_length((void **)commands); i++)
-		exec(str_arr_clean(get_argv(commands[i])));
+		/*exec(shell_filename, str_arr_clean(get_argv(commands[i])));*/
+		exec(shell_filename, (char **)arr_add(NULL, (void *)command));
 		
 	arr_free((void **)commands);
 }
 
 /**
  * exec_file - execute file commands.
+ * @shell_filename: the shell filename.
  * @filename: the file name.
  */
-void exec_file(char *filename)
+void exec_file(char *shell_filename, char *filename)
 {
 	char *content, **lines;
 	int i, len;
@@ -78,7 +81,7 @@ void exec_file(char *filename)
 	len = arr_length((void **)lines);
 
 	for (i = 0; i < len; i++)
-		exec_command(lines[i]);
+		exec_command(shell_filename, lines[i]);
 }
 
 /**
@@ -98,7 +101,7 @@ int main(int argc, char *arg[])
 	{
 		for (i = 1; i < argc; i++)
 			if (file_exists(arg[i]))
-				exec_file(arg[i]);
+				exec_file(arg[0], arg[i]);
 			else
 				_puts(str_join(4, arg[0], ": ", str_join(2, arg[i], N_ERROR)));
 	}
@@ -123,7 +126,7 @@ int main(int argc, char *arg[])
 				else if (iq)
 					command = str_join(2, command, input);
 				else
-					exec_command(command), iq = 0;
+					exec_command(arg[0], command), iq = 0;
 			}
 		};
 	

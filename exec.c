@@ -63,43 +63,44 @@ void set_errno(int status)
 
 /**
  * exec - execute the command.
+ * @shell_filename: the shell filename.
  * @argv: the array of arguments.
  */
-void exec(char **argv)
+void exec(char *shell_filename, char **argv)
 {
-	int status, exe_status, (*func)(char **);
-	alias_t *ali;
+	int status, exe_status/*, (*func)(char **)*/;
+	/*alias_t *ali;*/
 	pid_t pid;
 	char *filename;
 
-	detect_env_variables(argv);
+	/* detect_env_variables(argv); */
 
 	filename = argv[0];
-	func = exec_get(filename);
-	if (func)
-	{
-		status = func(argv + 1);
-		set_errno(status);
-		return;
-	}
+	/*func = exec_get(filename); */
+	/*if (func) */
+	/*{ */
+	/*	status = func(argv + 1); */
+	/*	set_errno(status); */
+	/*	return; */
+	/*} */
 
-	ali = alias_get(filename);
-	if (ali)
-		argv = get_argv(ali->command), filename = argv[0];
+	/*ali = alias_get(filename); */
+	/*if (ali) */
+	/*	argv = get_argv(ali->command), filename = argv[0]; */
 
-	if (!file_exists(filename))
-	{
-		filename = env_search_in_path(filename);
-		if (!filename)
-			filename = argv[0];
-	}
+	/*if (!file_exists(filename)) */
+	/*{ */
+	/*	filename = env_search_in_path(filename); */
+	/*	if (!filename) */
+	/*		filename = argv[0]; */
+	/*} */
 
 	pid = fork();
 	if (pid == 0)
 	{
 		exe_status = execve(filename, argv, environ);
 		if (exe_status == -1)
-			perror(filename), exit(EXIT_FAILURE);
+			perror(shell_filename), exit(EXIT_FAILURE);
 		
 		set_errno(exe_status);
 	}

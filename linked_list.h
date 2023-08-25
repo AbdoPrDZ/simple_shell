@@ -6,7 +6,7 @@
 
 /**
  * struct linked_list - Linked list of strings
- * @str: sting
+ * @data: sting
  * @next: pointer to next node
  */
 typedef struct linked_list
