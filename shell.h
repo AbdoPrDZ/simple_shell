@@ -1,6 +1,7 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+/* #define SHELL_COMMAND_START_MESSAGE "(abdali-shell)$ " */
 #define SHELL_COMMAND_START_MESSAGE "(abdali-shell)$ "
 #define N_ERROR ": No such file or directory\n"
 
