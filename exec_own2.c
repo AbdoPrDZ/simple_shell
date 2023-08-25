@@ -45,31 +45,3 @@ int exec_alias(char *shell_filename, char **argv)
 
 	return (status);
 }
-
-/**
- * exec_get_pid - get pid.
- * @shell_filename: the shell filename.
- * @argv: array of argv.
- * Return: exec status.
- */
-int exec_get_pid(char *shell_filename, char **argv)
-{
-	(void)argv;
-	(void)shell_filename;
-	_puts(str_join(2, int2str(getpid()), "\n"));
-	return (0);
-}
-
-/**
- * exec_last_exit_status - get last exit status.
- * @shell_filename: the shell filename.
- * @argv: array of argv.
- * Return: exec status.
- */
-int exec_last_exit_status(char *shell_filename, char **argv)
-{
-	(void)argv;
-	(void)shell_filename;
-	_puts(str_join(2, int2str(errno), "\n"));
-	return (0);
-}

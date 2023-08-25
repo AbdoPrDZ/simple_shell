@@ -1,5 +1,6 @@
 #include "shell.h"
 #include "env.h"
+#include <errno.h>
 
 /**
  * env_all - get all env variables as linked list
@@ -70,6 +71,11 @@ char *env_get(char *name)
 
 	if (!name)
 		return (NULL);
+
+	if (strcmp(name, "$") == 0)
+		return (int2str(getpid()));
+	else if (strcmp(name, "?") == 0)
+		return (int2str(errno));
 
 	i = env_get_index(name);
 	if (i != -1)

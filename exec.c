@@ -20,10 +20,8 @@ void detect_env_variables(char **argv)
 		while (start)
 		{
 			end = start + 1;
-			while (*end && (*end == '_' || isalnum(*end)))
-			{
+			while (*end && (*end == '_' || isalnum(*end) || *end == '$' || *end == '?'))
 				end++;
-			}
 
 			if (end > start + 1)
 			{
@@ -124,8 +122,6 @@ int (*exec_get(char *name))(char*, char **)
 		{"unsetenv", exec_env_unset},
 		{"cd", exec_chdir},
 		{"alias", exec_alias},
-		{"$$", exec_get_pid},
-		{"$?", exec_last_exit_status},
 		{NULL, NULL},
 	};
 

@@ -31,7 +31,5 @@ int exec_env_set(char *shell_filename, char **argv);
 int exec_env_unset(char *shell_filename, char **argv);
 int exec_chdir(char *shell_filename, char **argv);
 int exec_alias(char *shell_filename, char **argv);
-int exec_get_pid(char *shell_filename, char **argv);
-int exec_last_exit_status(char *shell_filename, char **argv);
 
 #endif /* EXEC_H */
