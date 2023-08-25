@@ -45,10 +45,11 @@ char **remove_comment_all(char *text)
  * @shell_filename: the shell filename.
  * @command: the command.
  */
-void exec_command(char *shell_filename, char *command)
+void exec_command(const char *shell_filename, char *command)
 {
-	char **commands = NULL;
-	int i, clen = _strlen(command);
+	char **commands = NULL, *c_command;
+	int i, j = 0, clen = _strlen(command);
+	int opai, opoi;
 
 	if (command[clen - 1] == '\n')
 		command[clen - 1] = '\0';
@@ -56,8 +57,34 @@ void exec_command(char *shell_filename, char *command)
 	commands = str_arr_clean(str_split(command, ";"));
 
 	for (i = 0; i < arr_length((void **)commands); i++)
-		exec(shell_filename, str_arr_clean(get_argv(commands[i])));
-		
+	{
+		c_command = str_copy(commands[i]);
+		clen = _strlen(c_command);
+		opai = str_contains(c_command, "&&");
+		opoi = str_contains(c_command, "||");
+		if (opai != -1 || opoi != -1)
+		{
+			while (opai != -1 || opoi != -1)
+			{
+				if ((opai != -1 && opai < opoi) || opoi == -1)
+					j = opai;
+				else
+					j = opoi;
+				exec(shell_filename, str_arr_clean(get_argv(str_cut(c_command, 0, j))));
+				if (j + 2 < clen)
+				{
+					c_command = str_copy(c_command + j + 2);
+					opai = str_contains(c_command, "&&");
+					opoi = str_contains(c_command, "||");
+				}
+				else
+					opai = -1, opoi = -1, free(c_command);
+			}
+		}
+		if (c_command)
+			exec(shell_filename, str_arr_clean(get_argv(c_command))), free(c_command);
+	}
+
 	arr_free((void **)commands);
 }
 

@@ -11,7 +11,7 @@
  * @argv: array of argv.
  * Return: exec status.
  */
-int exec_exit(char *shell_filename, char **argv)
+int exec_exit(const char *shell_filename, char **argv)
 {
 	int status = 0, *_status;
 
@@ -38,7 +38,7 @@ int exec_exit(char *shell_filename, char **argv)
  * @argv: array of argv.
  * Return: exec status.
  */
-int exec_env(char *shell_filename, char **argv)
+int exec_env(const char *shell_filename, char **argv)
 {
 	linked_list *head;
 
@@ -67,7 +67,7 @@ int exec_env(char *shell_filename, char **argv)
  * @argv: array of argv.
  * Return: exec status.
  */
-int exec_env_set(char *shell_filename, char **argv)
+int exec_env_set(const char *shell_filename, char **argv)
 {
 	if (!argv[0])
 	{
@@ -92,7 +92,7 @@ int exec_env_set(char *shell_filename, char **argv)
  * @argv: array of argv.
  * Return: exec status.
  */
-int exec_env_unset(char *shell_filename, char **argv)
+int exec_env_unset(const char *shell_filename, char **argv)
 {
 	int i, len = arr_length((void **)argv);
 
@@ -117,7 +117,7 @@ static char *old_pwd;
  * @argv: array of argv.
  * Return: exec status.
  */
-int exec_chdir(char *shell_filename, char **argv)
+int exec_chdir(const char *shell_filename, char **argv)
 {
 	char *distance = env_get("HOME");
 	char *pwd, *cwd;

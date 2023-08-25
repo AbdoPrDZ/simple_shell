@@ -24,5 +24,7 @@ char *str_rev(const char *str);
 char *int2str(int n);
 char *str_clean_spaces_se(const char *str);
 char *str_decode(const char *str);
+char *str_cut(const char *str, const int s, const int e);
+int str_str_count(const char *str, const char *target);
 
 #endif /* STRING_H */

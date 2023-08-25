@@ -102,6 +102,9 @@ int str_char_count(const char *str, char c)
 {
 	int i = 0, j = 0, len = _strlen(str);
 
+	if (!str)
+		return (0);
+
 	for (i = 0; i < len; i++)
 		if (str[i] == c)
 			if (i == 0 || (i > 0 && str[i - 1] != '\\'))

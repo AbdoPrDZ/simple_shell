@@ -20,7 +20,8 @@ void detect_env_variables(char **argv)
 		while (start)
 		{
 			end = start + 1;
-			while (*end && (*end == '_' || isalnum(*end) || *end == '$' || *end == '?'))
+			while (*end && 
+				  (*end == '_' || isalnum(*end) || *end == '$' || *end == '?'))
 				end++;
 
 			if (end > start + 1)
@@ -63,49 +64,50 @@ void set_errno(int status)
  * exec - execute the command.
  * @shell_filename: the shell filename.
  * @argv: the array of arguments.
+ * Return: 1 if success, 0 on error.
  */
-void exec(char *shell_filename, char **argv)
+int exec(const char *shell_filename, char **argv)
 {
-	int status, exe_status, (*func)(char*, char **);
+	int s, es, (*func)(const char*, char **);
 	alias_t *ali;
 	pid_t pid;
 	char *filename;
 
 	detect_env_variables(argv);
-
 	filename = argv[0];
 	func = exec_get(filename);
 	if (func)
 	{
-		status = func(shell_filename, argv + 1);
-		set_errno(status);
-		return;
+		s = func(shell_filename, argv + 1), set_errno(s);
+		if (s == -1)
+			return (0);
+		return (1);
 	}
-
 	ali = alias_get(filename);
 	if (ali)
 		argv = get_argv(ali->command), filename = argv[0];
-
 	if (!file_exists(filename))
 	{
 		filename = env_search_in_path(filename);
 		if (!filename)
 			filename = argv[0];
 	}
-
 	pid = fork();
 	if (pid == 0)
 	{
-		exe_status = execve(filename, argv, environ);
-		if (exe_status == -1)
+		es = execve(filename, argv, environ), set_errno(es);
+		if (es == -1)
+		{
 			perror(shell_filename), exit(EXIT_FAILURE);
-		
-		set_errno(exe_status);
+			return (0);
+		}
+		return (1);
 	}
 	else if (pid == -1)
 		perror(env_get("_"));
 	else
-		wait(&status), set_errno(status);
+		wait(&s), set_errno(s);
+	return (0);
 }
 
 /**
@@ -113,7 +115,7 @@ void exec(char *shell_filename, char **argv)
  * @name: name of exec.
  * Return: the pointer of exec function
  */
-int (*exec_get(char *name))(char*, char **)
+int (*exec_get(char *name))(const char*, char **)
 {
 	exec_t execs[] = {
 		{"exit", exec_exit},

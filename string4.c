@@ -74,3 +74,55 @@ char *str_decode(const char *str)
 
 	return (decoded);
 }
+
+/**
+ * str_cut - cut part of str.
+ * @str: string want to cut.
+ * @s: string pos.
+ * @e: string pos.
+ * Return: the part of string.
+ */
+char *str_cut(const char *str, const int s, const int e)
+{
+	int i, j, len = _strlen(str);
+	char *cstr;
+
+	if (!str || s > e || e > len)
+		return (NULL);
+
+	cstr = malloc(sizeof(char) * (e - s + 1));
+	if (!cstr)
+		return (NULL);
+
+	for (i = s, j = 0; i < e; i++, j++)
+		cstr[j] = str[i];
+
+	cstr[j] = '\0';
+
+	return (cstr);
+}
+
+/**
+ * str_str_count - counting str in str
+ * @str: the string.
+ * @target: ths target string.
+ * Return: count of str in str.
+ */
+int str_str_count(const char *str, const char *target)
+{
+	int c = 0, s = 0, ti, len = _strlen(str), tlen = _strlen(target);
+
+	if (!str || !target || tlen > len)
+		return (0);
+
+	ti = str_contains(str, target);
+
+	while (ti != -1)
+	{
+		c++;
+		s = ti + tlen;
+		ti = str_contains(str + s, target);
+	}
+
+	return (c);
+}

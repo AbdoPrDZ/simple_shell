@@ -11,7 +11,7 @@
  * @argv: array of argv.
  * Return: exec status.
  */
-int exec_alias(char *shell_filename, char **argv)
+int exec_alias(const char *shell_filename, char **argv)
 {
 	int i, alen, ei/*, vlen*/, status = 0;
 	char *name, *value;
