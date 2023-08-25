@@ -32,3 +32,45 @@ char *str_clean_spaces_se(const char *str)
 
 	return (cstr);
 }
+
+/**
+ * str_decode - decode string.
+ * @str: the string.
+ * Return: decoded string.
+ */
+char *str_decode(const char *str)
+{
+	int len = strlen(str), i, j = 0, escaped = 0, double_escaped = 0;
+	char *decoded = (char *)malloc(len + 1);
+
+	if (decoded == NULL)
+		return (NULL);
+
+	for (i = 0; i < len; i++)
+		if (str[i] == '\\' && !escaped)
+			escaped = 1;
+		else if (escaped && str[i] == '\\' && !double_escaped)
+			double_escaped = 1;
+		else
+		{
+			if (double_escaped)
+			{
+				decoded[j++] = '\\';
+				double_escaped = 0;
+			}
+			decoded[j++] = str[i];
+			escaped = 0;
+		}
+
+	decoded[j] = '\0';
+
+	len = _strlen(decoded);
+
+	if (len >= 2 && decoded[0] == '"' && decoded[len - 1] == '"')
+	{
+		decoded = str_copy(decoded + 1);
+		decoded[len - 2] = '\0';
+	}
+
+	return (decoded);
+}

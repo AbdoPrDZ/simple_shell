@@ -13,7 +13,7 @@
  */
 int exec_alias(char *shell_filename, char **argv)
 {
-	int i, alen, ei, vlen, status = 0;
+	int i, alen, ei/*, vlen*/, status = 0;
 	char *name, *value;
 
 	alen = arr_length((void **)argv);
@@ -37,13 +37,7 @@ int exec_alias(char *shell_filename, char **argv)
 			name = malloc(sizeof(char) * (ei));
 			strncpy(name, argv[i], ei);
 			name[ei] = '\0';
-			value = argv[0] + ei + 1;
-			vlen = _strlen(value);
-			if (value[0] == '"')
-				value = value + 1,
-				vlen--;
-			if (value[vlen - 1] == '"')
-				value[vlen - 1] = '\0';
+			value = str_decode(argv[i] + ei + 1);
 			alias_set(name, value);
 			status = 0;
 		}

@@ -19,9 +19,10 @@ char *str_replace(const char *str, const char *replace, const char *target);
 int *str2int(const char *str);
 char **str_arr_clean(char **arr);
 int str_contains(const char *str, const char *target);
-int str_char_count(char *str, char c);
+int str_char_count(const char *str, char c);
 char *str_rev(const char *str);
 char *int2str(int n);
 char *str_clean_spaces_se(const char *str);
+char *str_decode(const char *str);
 
 #endif /* STRING_H */

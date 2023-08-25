@@ -93,7 +93,7 @@ int main(int argc, char *arg[])
 {
 	char *input, *command = NULL;
 	size_t csize = 0;
-	int i, ilen, iq = 0, qc;
+	int i, ilen, iq = 0;
 
 	signal(SIGINT, handle_signal);
 	if (argc > 1)
@@ -113,22 +113,22 @@ int main(int argc, char *arg[])
 				_puts("> ");
 			handle_eof(getline(&input, &csize, stdin), input);
 			input = remove_comment(input), ilen = _strlen(input);
-			if (ilen > 0 && iq && str_contains(input, "\"") == -1)
+			if (iq && str_contains(input, "\"") == -1)
 				command = str_join(2, command, input);
 			else if (ilen > 0)
 			{
 				if (!iq)
+				{
 					command = str_copy(input);
-				qc = str_char_count(command, '"');
-				if (!iq && (str_contains(input, "\"") != -1) && (qc <= 1))
-					iq = 1;
-				else if (iq)
-					command = str_join(2, command, input);
+					if ((str_char_count(input, '\"') % 2) != 0)
+						iq = 1;
+				}
 				else
-					exec_command(arg[0], command), iq = 0;
+					command = str_join(2, command, input), iq = 0;
+				if (!iq)
+					exec_command(arg[0], command);
 			}
 		};
-	
 	free(input), free(command);
 	return (0);
 }

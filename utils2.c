@@ -51,21 +51,10 @@ void _isatty(void)
  */
 char **clean_argv(char **argv)
 {
-	int i, len = arr_length((void **)argv), alen;
-	char *arg;
+	int i, len = arr_length((void **)argv);
 
 	for (i = 0; i < len; i++)
-	{
-		arg = argv[i];
-		alen = _strlen(arg);
-
-		if (alen >= 2 && arg[0] == '"' && arg[alen - 1] == '"')
-		{
-			argv[i] = str_copy(arg + 1);
-			argv[i][alen - 2] = '\0';
-			free(arg);
-		}
-	}
+		argv[i] = str_decode(argv[i]);
 
 	return (argv);
 }

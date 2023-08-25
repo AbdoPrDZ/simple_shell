@@ -98,13 +98,14 @@ char **str_arr_clean(char **arr)
  * @c: the char.
  * Return: count of c in str.
  */
-int str_char_count(char *str, char c)
+int str_char_count(const char *str, char c)
 {
 	int i = 0, j = 0, len = _strlen(str);
 
 	for (i = 0; i < len; i++)
 		if (str[i] == c)
-			j++;
+			if (i == 0 || (i > 0 && str[i - 1] != '\\'))
+				j++;
 
 	return (j);
 }
