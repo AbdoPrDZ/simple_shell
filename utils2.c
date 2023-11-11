@@ -58,3 +58,18 @@ char **clean_argv(char **argv)
 
 	return (argv);
 }
+
+/**
+ * remove_comment - remove comment from command.
+ * @str: this command.
+ * Return: modifed command.
+ */
+char *remove_comment(char *str)
+{
+	int i = str_contains(str, " #");
+
+	if (i != -1)
+		str = str_replace(str, "", str + i);
+
+	return (str);
+}

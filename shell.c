@@ -6,21 +6,6 @@
 #include <signal.h>
 
 /**
- * remove_comment - remove comment from command.
- * @str: this command.
- * Return: modifed command.
- */
-char *remove_comment(char *str)
-{
-	int i = str_contains(str, " #");
-
-	if (i != -1)
-		str = str_replace(str, "", str + i);
-
-	return (str);
-}
-
-/**
  * remove_comment_all - remove comments from all lines.
  * @text: the text.
  * Return: array of lines.
@@ -102,12 +87,57 @@ void exec_file(char *shell_filename, char *filename)
 
 	if (!content)
 		return;
-	
+
 	lines = remove_comment_all(content);
 	len = arr_length((void **)lines);
 
 	for (i = 0; i < len; i++)
 		exec_command(shell_filename, lines[i]);
+}
+
+/**
+ * start_shell - starting the shell
+ * @arg: arguments
+ */
+void start_shell(char *arg[])
+{
+	char *input, *command = NULL;
+	size_t csize = 0;
+	int iq = NOT_IN_QUOTE;
+
+	while (1)
+	{
+		if (iq == NOT_IN_QUOTE)
+			_isatty();
+		else
+			_puts("> ");
+		handle_eof(getline(&input, &csize, stdin), input);
+		input = remove_comment(input);
+		if (iq == NOT_IN_QUOTE &&
+			str_contains(input, "\"") == -1 &&
+			str_contains(input, "\'") == -1 &&
+			str_contains(input, "`") == -1)
+			command = str_copy(input);
+		else
+		{
+			command = str_join(2, command, input);
+			if (iq == NOT_IN_QUOTE && (str_char_count(command, '\"') % 2) != 0)
+				iq = IN_DOUBLE_QUOTE;
+			else if (iq == NOT_IN_QUOTE && (str_char_count(command, '\'') % 2) != 0)
+				iq = IN_SINGLE_QUOTE;
+			else if (iq == NOT_IN_QUOTE && (str_char_count(command, '`') % 2) != 0)
+				iq = IN_BT_QUOTE;
+
+			if ((iq == IN_DOUBLE_QUOTE && (str_char_count(command, '\"') % 2) == 0) ||
+				(iq == IN_SINGLE_QUOTE && (str_char_count(command, '\'') % 2) == 0) ||
+				(iq == IN_BT_QUOTE && (str_char_count(command, '`') % 2) == 0))
+				iq = NOT_IN_QUOTE;
+		}
+
+		if (iq == NOT_IN_QUOTE)
+			exec_command(arg[0], command), command = "";
+	}
+	free(command), free(input);
 }
 
 /**
@@ -118,9 +148,7 @@ void exec_file(char *shell_filename, char *filename)
  */
 int main(int argc, char *arg[])
 {
-	char *input, *command = NULL;
-	size_t csize = 0;
-	int i, ilen, iq = 0;
+	int i;
 
 	signal(SIGINT, handle_signal);
 	if (argc > 1)
@@ -132,30 +160,7 @@ int main(int argc, char *arg[])
 				_puts(str_join(4, arg[0], ": ", str_join(2, arg[i], ERR1)));
 	}
 	else
-		while (1)
-		{
-			if (!iq) 
-				_isatty();
-			else
-				_puts("> ");
-			handle_eof(getline(&input, &csize, stdin), input);
-			input = remove_comment(input), ilen = _strlen(input);
-			if (iq && str_contains(input, "\"") == -1)
-				command = str_join(2, command, input);
-			else if (ilen > 0)
-			{
-				if (!iq)
-				{
-					command = str_copy(input);
-					if ((str_char_count(input, '\"') % 2) != 0)
-						iq = 1;
-				}
-				else
-					command = str_join(2, command, input), iq = 0;
-				if (!iq)
-					exec_command(arg[0], command);
-			}
-		};
-	free(input), free(command);
+		start_shell(arg);
+
 	return (0);
 }
