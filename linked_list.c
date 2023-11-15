@@ -17,7 +17,7 @@ linked_list *ll_add_end(linked_list *head, void *data)
 
 	if (!node || !data)
 		return (NULL);
-	
+
 	node->data = data;
 	node->next = NULL;
 
@@ -26,7 +26,7 @@ linked_list *ll_add_end(linked_list *head, void *data)
 		tmp = head;
 		while (tmp->next)
 			tmp = tmp->next;
-		
+
 		tmp->next = node;
 	}
 	else
@@ -53,7 +53,7 @@ linked_list *ll_from_string(char *str, char *imm)
 
 	for (i = 0; i < slen; i++)
 		head = ll_add_end(head, (void *)strs[i]);
-	
+
 	return (head);
 }
 
@@ -73,4 +73,3 @@ void ll_free(linked_list *head)
 		head = tmp;
 	}
 }
-

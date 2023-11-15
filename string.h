@@ -11,7 +11,6 @@ int _strlen(const char *s);
 int _putchar(const char c);
 void _puts(const char *str);
 char *str_join(int n, ...);
-char *str_arr_join(char **arr, char *sep);
 char *str_copy(const char *str);
 char **str_split(char *str, char *imm);
 char *str_place(char *str, char *replace, int pos, int keep_old_end);
@@ -25,6 +24,5 @@ char *int2str(int n);
 char *str_clean_spaces_se(const char *str);
 char *str_decode(const char *str);
 char *str_cut(const char *str, const int s, const int e);
-int str_str_count(const char *str, const char *target);
 
 #endif /* STRING_H */

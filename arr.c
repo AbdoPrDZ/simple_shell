@@ -18,49 +18,6 @@ int arr_length(void **arr)
 
 	return (i);
 }
-/**
- * arr_copy - copy array.
- * @arr: that array want to copy.
- * Return: copied array.
- */
-void **arr_copy(void **arr)
-{
-	int i, len = arr_length(arr);
-	void **copy;
-
-	if (!arr)
-		return (NULL);
-
-	copy = malloc((len + 1) * sizeof(void *));
-	if (!copy)
-		return (NULL);
-
-	for (i = 0; i <= len; i++)
-		copy[i] = arr[i];
-
-	return (copy);
-}
-
-/**
- * arr_add - add item to array.
- * @arr: the array.
- * @item: the item want to add.
- * Return: modifed array.
- */
-void **arr_add(void **arr, void *item)
-{
-	int len;
-	void **carr;
-
-	len = arr_length(arr);
-	carr = _realloc(arr, sizeof(void *) * (len + 1));
-	if (!carr)
-		return (NULL);
-
-	carr[len] = item;
-
-	return (carr);
-}
 
 /**
  * arr_remove - remove element from array
@@ -95,9 +52,9 @@ void arr_free(void **arr)
 
 	if (!arr)
 		return;
-	
+
 	for (i = 0; arr[i]; i++)
 		free(arr[i]);
-	
+
 	free(arr);
 }

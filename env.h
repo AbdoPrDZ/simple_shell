@@ -7,6 +7,7 @@
 #include <stdlib.h>
 
 linked_list *env_all(void);
+int env_length(void);
 int env_get_index(const char *name);
 char *env_get(char *name);
 void env_set(char *name, char *value);

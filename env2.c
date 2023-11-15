@@ -28,13 +28,18 @@ char *env_search_in_path(char *filename)
 	while (tmp)
 	{
 		full_path = str_join(3, tmp->data, "/", filename);
-	
+
 		if (file_exists(full_path))
+		{
+			ll_free(tmp);
 			return (full_path);
+		}
 
 		free(full_path);
 		tmp = tmp->next;
 	}
+
+	ll_free(tmp);
 
 	return (NULL);
 }

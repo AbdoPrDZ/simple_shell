@@ -16,6 +16,11 @@
 
 extern char **environ;
 
+char **remove_comment_all(char *text);
+void exec_command(const char *shell_filename, char *command);
+void exec_file(char *shell_filename, char *filename);
+void start_shell(char *arg[]);
+
 /* utils */
 void *_realloc(void *ptr, unsigned int new_size);
 int file_exists(const char *filepath);
@@ -25,6 +30,7 @@ char **clean_argv(char **argv);
 void handle_signal(int n);
 void handle_eof(int len, char *buff);
 void _isatty(void);
+char **clean_argv(char **argv);
 char *remove_comment(char *str);
 
 #endif /* MAIN_H */

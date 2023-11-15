@@ -16,7 +16,6 @@ typedef struct alias_t
 } alias_t;
 
 void alias_set(const char *name, const char *command);
-int alias_unset(const char *name);
 alias_t *alias_get(char *name);
 void alias_unset_all(void);
 int alias_print(char *name);

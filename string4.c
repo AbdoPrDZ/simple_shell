@@ -101,28 +101,3 @@ char *str_cut(const char *str, const int s, const int e)
 
 	return (cstr);
 }
-
-/**
- * str_str_count - counting str in str
- * @str: the string.
- * @target: ths target string.
- * Return: count of str in str.
- */
-int str_str_count(const char *str, const char *target)
-{
-	int c = 0, s = 0, ti, len = _strlen(str), tlen = _strlen(target);
-
-	if (!str || !target || tlen > len)
-		return (0);
-
-	ti = str_contains(str, target);
-
-	while (ti != -1)
-	{
-		c++;
-		s = ti + tlen;
-		ti = str_contains(str + s, target);
-	}
-
-	return (c);
-}
