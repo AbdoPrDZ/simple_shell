@@ -60,34 +60,6 @@ char *str_join(int n, ...)
 }
 
 /**
- * str_arr_join - join array of string into string.
- * @arr: the array.
- * @sep: sep string.
- * Return: the joined string.
- */
-char *str_arr_join(char **arr, char *sep)
-{
-	int i, alen;
-	char *str;
-
-	alen = arr_length((void **)arr);
-
-	if (!arr || alen == 0)
-		return (NULL);
-
-	str = arr[0];
-
-	for (i = 1; i < alen; i++)
-	{
-		str = str_join(2, str, arr[i]);
-		if (i < alen - 1)
-			str = str_join(2, str, sep);
-	}
-
-	return (str);
-}
-
-/**
  * str_copy - create allocated copy of string
  * @str: the pointer of string want to copy
  * Return: a pointer of string copy

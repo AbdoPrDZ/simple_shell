@@ -7,7 +7,5 @@
 int arr_length(void **arr);
 int arr_remove(void **arr, int index);
 void arr_free(void **arr);
-void **arr_copy(void **arr);
-void **arr_add(void **arr, void *item);
 
 #endif /* ARR_H */

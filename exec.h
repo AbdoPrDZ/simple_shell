@@ -18,9 +18,11 @@
 typedef struct exec_t
 {
 	char *name;
-	int (*func)(const char*, char **);
+	int (*func)(const char *, char **);
 } exec_t;
 
+void detect_env_variables(char **argv);
+void set_errno(int status);
 int exec(const char *shell_filename, char **argv);
 int (*exec_get(char *name))(const char *, char **);
 
